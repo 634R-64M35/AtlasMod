@@ -1,0 +1,3 @@
+author = Dia and the Atlas Crew
+version = 0.1
+displayName = The Atlas Mod
