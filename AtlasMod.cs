@@ -1,11 +1,7 @@
 using Terraria.ModLoader;
 
-namespace AtlasMod
-{
-	class AtlasMod : Mod
-	{
-		public AtlasMod()
-		{
-		}
+namespace AtlasMod {
+    public class AtlasMod : Mod {
+		public static AtlasMod Instance => ModContent.GetInstance<AtlasMod>();
 	}
 }

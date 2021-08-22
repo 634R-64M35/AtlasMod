@@ -1,3 +1,9 @@
+displayName = Atlas Mod
 author = Dia and the Atlas Crew
 version = 0.1
-displayName = The Atlas Mod
+
+hideCode = false
+hideResources = false
+
+includeSource = true
+includePDB = true
