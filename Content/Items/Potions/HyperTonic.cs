@@ -1,25 +1,28 @@
-﻿using Terraria.ID;
+﻿using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
-namespace AtlasMod.Content.Items.Potions {
-    public class HyperTonic : ModItem {
-        public override void SetStaticDefaults() => DisplayName.SetDefault("Hyper Tonic");
+namespace AtlasMod.Content.Items.Potions
+{
+    public class HyperTonic : TonicItem
+    {
+        public HyperTonic() : base(
+            displayName: "Hypertonic",
+            tooltip: "Increases movement speed by 50%, but reduces defense by 20",
+            buffType: ModContent.BuffType<Buffs.Potions.HyperTonicBuff>(),
+            buffTime: 300 * 60,
+            particleColors: new Color[]
+            {
+                new Color(10, 184, 223),
+                new Color(41, 227, 89),
+                new Color(108, 60, 130)
+            }
+        )
+        { }
 
-        public override void SetDefaults() {
-            item.consumable = true;
-
-            item.maxStack = 30;
-
-            item.width = 26;
-            item.height = 46;
-
-            item.useTime = item.useAnimation = 15;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-
-            item.buffType = ModContent.BuffType<Buffs.Potions.HyperTonic>();
-            item.buffTime = 18000;
-
-            item.UseSound = SoundID.Item3;
+        public override void TonicSetDefaults()
+        {
+            Item.width = 26;
+            Item.height = 46;
         }
     }
 }
