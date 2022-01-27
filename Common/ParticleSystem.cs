@@ -5,21 +5,21 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace SPladisonsYoyoMod.Common
+namespace AtlasMod.Common
 {
     // It looks like dust, but uses Additive instead of AlphaBlend :/
     public class ParticleSystem : ModSystem
     {
-        internal static readonly List<Particle> Particles = new List<Particle>();
+        internal static readonly List<Particle> Particles = new ();
 
         public override void PostUpdateDusts()
         {
             foreach (var particle in Particles.ToArray()) particle.Update();
         }
 
-        public static void NewParticle(Asset<Texture2D> texture, int timeLeft, Vector2 position, Vector2? velocity = null, float rotation = 0f, float scale = 1f)
+        public static void NewParticle(Asset<Texture2D> texture, Color color, int timeLeft, Vector2 position, Vector2? velocity = null, float rotation = 0f, float scale = 1f)
         {
-            var particle = new Particle(texture, timeLeft, position, velocity, rotation, scale);
+            var particle = new Particle(texture, color, timeLeft, position, velocity, rotation, scale);
             ParticleSystem.NewParticle(particle);
         }
 
@@ -41,6 +41,8 @@ namespace SPladisonsYoyoMod.Common
         public Vector2 oldPosition;
         public Vector2 velocity;
 
+        public Color color;
+
         public float rotation;
         public float scale;
 
@@ -48,11 +50,12 @@ namespace SPladisonsYoyoMod.Common
         public int frame;
         public int frameCount = 1;
 
-        public Particle(Asset<Texture2D> texture, int timeLeft, Vector2 position, Vector2? velocity = null, float rotation = 0f, float scale = 1f)
+        public Particle(Asset<Texture2D> texture, Color color, int timeLeft, Vector2 position, Vector2? velocity = null, float rotation = 0f, float scale = 1f)
         {
             this.Texture = texture;
             this.InitTimeLeft = timeLeft;
 
+            this.color = color;
             this.timeLeft = timeLeft;
             this.position = position;
             this.velocity = velocity ?? Vector2.Zero;
@@ -79,7 +82,7 @@ namespace SPladisonsYoyoMod.Common
             if (!rect.Contains((int)position.X, (int)position.Y)) return;
 
             var height = (int)(Texture.Height() / frameCount);
-            spriteBatch.Draw(Texture.Value, position - Main.screenPosition, new Rectangle(0, height * frame, Texture.Width(), height), Color.White * 0.95f, rotation, new Vector2(Texture.Width(), height) * 0.5f, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture.Value, position - Main.screenPosition, new Rectangle(0, height * frame, Texture.Width(), height), color, rotation, new Vector2(Texture.Width(), height) * 0.5f, scale, SpriteEffects.None, 0f);
         }
 
         protected virtual bool PreKill() { return true; }

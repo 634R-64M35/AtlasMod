@@ -1,8 +1,8 @@
-﻿using AtlasMod.Common.Interfaces;
+﻿using AtlasMod.Common;
+using AtlasMod.Common.Interfaces;
 using AtlasMod.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SPladisonsYoyoMod.Common;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -20,7 +20,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hurricane GRS");
-            Tooltip.SetDefault("Management would be pleased");
+            Tooltip.SetDefault("'Management would be pleased'");
         }
 
         public override void SetDefaults()

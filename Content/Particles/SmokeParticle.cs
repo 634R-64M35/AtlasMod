@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtlasMod.Common;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SPladisonsYoyoMod.Common;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -8,13 +8,9 @@ namespace AtlasMod.Content.Particles
 {
     public class SmokeParticle : Particle
     {
-        private Color _color;
-
         public SmokeParticle(int timeLeft, Vector2 position, Vector2? velocity = null, Color? color = null, float rotation = 1f, float scale = 1f) :
-        base(ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Particles/SmokeParticle"), timeLeft, position, velocity, rotation, scale)
-        {
-            _color = color ?? Color.LightGray;
-        }
+        base(ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Particles/SmokeParticle"), color ?? Color.LightGray, timeLeft, position, velocity, rotation, scale)
+        { }
 
         public override void Update()
         {
@@ -32,7 +28,7 @@ namespace AtlasMod.Content.Particles
             var rect = new Rectangle((int)Main.screenPosition.X - 25, (int)Main.screenPosition.Y - 25, Main.screenWidth + 25, Main.screenHeight + 25);
             if (!rect.Contains((int)position.X, (int)position.Y)) return;
 
-            Color color = Lighting.GetColor(position.ToTileCoordinates(), _color) * (timeLeft / (float)InitTimeLeft) * 0.3f;
+            Color color = Lighting.GetColor(position.ToTileCoordinates(), this.color) * (timeLeft / (float)InitTimeLeft) * 0.3f;
             spriteBatch.Draw(Texture.Value, position - Main.screenPosition, null, color, rotation, Texture.Size() * 0.5f, scale * 0.15f, SpriteEffects.None, 0f);
         }
     }

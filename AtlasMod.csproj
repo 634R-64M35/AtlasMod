@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Textures\Items\Weapons\" />
+    <Folder Include="Assets\Textures\Items\Tools\" />
     <Folder Include="Assets\Textures\Projectiles\" />
   </ItemGroup>
 </Project>

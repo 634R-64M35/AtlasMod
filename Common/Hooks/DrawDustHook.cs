@@ -1,6 +1,5 @@
 ﻿using AtlasMod.Common.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
-using SPladisonsYoyoMod.Common;
 using System;
 using System.Linq;
 using Terraria;

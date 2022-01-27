@@ -37,6 +37,7 @@ namespace AtlasMod.Content.Items.Potions
                 ItemID.Sets.DrinkParticleColors[Type] = _particleColors;
             }
 
+            this.SacrificeTotal = 20;
             this.TonicSetStaticDefaults();
         }
 
