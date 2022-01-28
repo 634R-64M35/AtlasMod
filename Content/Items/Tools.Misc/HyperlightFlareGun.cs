@@ -6,9 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -66,8 +63,8 @@ namespace AtlasMod.Content.Items.Tools.Misc
                 var particle = new HyperlightFlareGunParticle(
                     color: HyperlightFlareGunProjectile.Colors[flareType],
                     timeLeft: 60,
-                    position: position + Vector2.Normalize(velocity) * 45,
-                    velocity: velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.15f, 0.3f),
+                    position: position,
+                    velocity: velocity.RotatedBy(Main.rand.NextFloat(-0.67f, 0.65f)) * Main.rand.NextFloat(0.01f, 0.1f),
                     scale: Main.rand.NextFloat(0.7f, 0.9f)
                 );
                 ParticleSystem.NewParticle(particle);
@@ -218,12 +215,6 @@ namespace AtlasMod.Content.Items.Tools.Misc
             var texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Misc/Extra_1");
             var color = Colors[_flareType] * 0.5f;
             Main.EntitySpriteDraw(texture.Value, position, null, color, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.45f, SpriteEffects.None, 0);
-
-            if (Projectile.localAI[0] != 1f) return;
-
-            /*texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Misc/Extra_1");
-            color = Colors[_flareType] * 0.5f;
-            Main.EntitySpriteDraw(texture.Value, position, null, color, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.45f, SpriteEffects.None, 0);*/
         }
     }
 }

@@ -1,10 +1,5 @@
-﻿using AtlasMod.Common.Interfaces;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AtlasMod.Common.Hooks

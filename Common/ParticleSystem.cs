@@ -10,7 +10,7 @@ namespace AtlasMod.Common
     // It looks like dust, but uses Additive instead of AlphaBlend :/
     public class ParticleSystem : ModSystem
     {
-        internal static readonly List<Particle> Particles = new ();
+        internal static readonly List<Particle> Particles = new();
 
         public override void PostUpdateDusts()
         {

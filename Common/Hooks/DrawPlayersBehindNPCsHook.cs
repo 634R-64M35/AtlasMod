@@ -1,7 +1,6 @@
-﻿using AtlasMod.Common.Interfaces;
+﻿using AtlasMod.Content.Items.Weapons.Ranged;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Linq;
 using Terraria;
 
 namespace AtlasMod.Common.Hooks
@@ -15,6 +14,23 @@ namespace AtlasMod.Common.Hooks
         {
             var spriteBatch = Main.spriteBatch;
             var pts = PrimitiveTrailSystem.Instance;
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            foreach (var npc in Main.npc)
+            {
+                if (!npc.TryGetGlobalNPC(out MeticuliteBowMarkGlobalNPC global)) continue;
+
+                try
+                {
+                    global.DrawMeticuliteMark(npc);
+                }
+                catch (Exception e)
+                {
+                    TimeLogger.DrawException(e);
+                    npc.active = false;
+                }
+            }
+            spriteBatch.End();
 
             if (pts != null)
             {
