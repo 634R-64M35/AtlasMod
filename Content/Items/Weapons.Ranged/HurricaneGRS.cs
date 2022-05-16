@@ -65,7 +65,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             player.bodyFrame.Y = player.bodyFrame.Height * 3;
         }
 
-        public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             velocity = GetShootVector(player.MountedCenter + player.gfxOffY * Vector2.UnitY) * velocity.Length();
             type = ModContent.ProjectileType<HurricaneGRSHeldProjectile>();
@@ -197,7 +197,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
 
                 var rocketType = ModContent.ProjectileType<HurricaneGRSRocketProjectile>();
                 var spawnPos = center + new Vector2(10 * player.direction, 14 * player.gravDir).RotatedBy(player.fullRotation);
-                var index = Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), spawnPos.X, spawnPos.Y, Projectile.velocity.X, Projectile.velocity.Y, rocketType, Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+                var index = Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos.X, spawnPos.Y, Projectile.velocity.X, Projectile.velocity.Y, rocketType, Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
 
                 (Main.projectile[index].ModProjectile as HurricaneGRSRocketProjectile).Speed = shootSpeed;
                 ShootCounter++;
