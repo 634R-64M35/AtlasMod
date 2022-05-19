@@ -203,12 +203,12 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
                 ShootCounter++;
 
                 float speed = shootSpeed, knockBack = Projectile.knockBack;
-                bool canShoot = true;
+                //bool canShoot = true;
                 int damage = Projectile.damage;
 
                 if (ShootCounter > 1)
                 {
-                    player.PickAmmo(player.HeldItem, ref rocketType, ref speed, ref canShoot, ref damage, ref knockBack, out int usedAmmoItemId);
+                    player.PickAmmo(player.HeldItem, out rocketType, out speed, out damage, out knockBack, out int usedAmmoItemId);
                 }
             }
 

@@ -48,7 +48,7 @@ namespace AtlasMod.Content.Items.Tools.Misc
             Item.noMelee = true;
         }
 
-        public override bool CanConsumeAmmo(Player player) => Main.rand.NextBool(3);
+        public override bool CanConsumeAmmo(Item ammo, Player player) => Main.rand.NextBool(3);
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
