@@ -11,20 +11,16 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AtlasMod.Content.Items.Weapons.Ranged
-{
-    public class HurricaneGRS : ModItem
-    {
+namespace AtlasMod.Content.Items.Weapons.Ranged {
+    public class HurricaneGRS : ModItem {
         public override string Texture => AtlasMod.AssetPath + "Textures/Items/Weapons/HurricaneGRS";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Hurricane GRS");
             Tooltip.SetDefault("'Management would be pleased'");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Item.width = 68;
             Item.height = 38;
 
@@ -38,9 +34,9 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             Item.shootSpeed = 15f;
 
             Item.rare = ItemRarityID.Yellow;
-            Item.value = Item.sellPrice(platinum: 0, gold: 0, silver: 0, copper: 0);
+            Item.value = Item.sellPrice(platinum: 0, gold: 12, silver: 20, copper: 50);
 
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 30;
             Item.useTime = 10;
             Item.autoReuse = true;
@@ -49,24 +45,21 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             Item.channel = true;
         }
 
-        public override void AddRecipes()
-        {
-            var recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.RocketLauncher);
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 15);
-            recipe.AddIngredient(ItemID.Nanites, 50);
-            recipe.AddIngredient(ItemID.Wire, 10);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+        public override void AddRecipes() {
+            ModContent.GetInstance<HurricaneGRS>().CreateRecipe()
+                .AddIngredient(ItemID.RocketLauncher)
+                .AddIngredient(ItemID.ChlorophyteBar, 15)
+                .AddIngredient(ItemID.Nanites, 50)
+                .AddIngredient(ItemID.Wire, 10)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
 
-        public override void UseItemFrame(Player player)
-        {
+        public override void UseItemFrame(Player player) {
             player.bodyFrame.Y = player.bodyFrame.Height * 3;
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
             velocity = GetShootVector(player.MountedCenter + player.gfxOffY * Vector2.UnitY) * velocity.Length();
             type = ModContent.ProjectileType<HurricaneGRSHeldProjectile>();
 
@@ -74,27 +67,23 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             return false;
         }
 
-        public override bool CanUseItem(Player player)
-        {
+        public override bool CanUseItem(Player player) {
             int count = player.ownedProjectileCounts[ModContent.ProjectileType<HurricaneGRSRocketProjectile>()];
             return count <= 6;
         }
 
-        public static Vector2 GetShootVector(Vector2 playerCenter)
-        {
+        public static Vector2 GetShootVector(Vector2 playerCenter) {
             const float ANGLE = 0.25f;
 
             Vector2 vecToMouse = Vector2.Normalize(Main.MouseWorld - playerCenter);
             int direction = Math.Sign(vecToMouse.X);
 
-            if (float.IsNaN(vecToMouse.X) || float.IsNaN(vecToMouse.Y))
-            {
+            if (float.IsNaN(vecToMouse.X) || float.IsNaN(vecToMouse.Y)) {
                 vecToMouse = -Vector2.UnitY;
             }
 
             Vector2 ret = new Vector2(1, 0);
-            if (direction < 0)
-            {
+            if (direction < 0) {
                 vecToMouse = -vecToMouse;
                 ret = new Vector2(-1, 0);
             }
@@ -104,22 +93,21 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
         }
     }
 
-    public class HurricaneGRSHeldProjectile : ModProjectile
-    {
+    public class HurricaneGRSHeldProjectile : ModProjectile {
         public int ShootCounter { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value; }
+
         public bool CanShoot => ShootTimer == 4;
+
         public ref float ShootTimer => ref Projectile.ai[1];
 
         public override string Texture => AtlasMod.AssetPath + "Textures/Projectiles/HurricaneGRSHeldProjectile";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Hurricane GRS");
             Main.projFrames[Type] = 8;
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.width = 20;
@@ -133,8 +121,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             Projectile.ignoreWater = true;
         }
 
-        public override void AI()
-        {
+        public override void AI() {
             Player player = Main.player[Projectile.owner];
 
             ShootTimer++;

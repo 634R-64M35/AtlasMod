@@ -12,21 +12,17 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AtlasMod.Content.Items.Tools.Misc
-{
-    public class HyperlightFlareGun : ModItem
-    {
+namespace AtlasMod.Content.Items.Tools.Misc {
+    public class HyperlightFlareGun : ModItem {
         public override string Texture => AtlasMod.AssetPath + "Textures/Items/Tools/HyperlightFlareGun";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Hyperlight Flare Gun");
             Tooltip.SetDefault("66% chance to not consume flare\n" +
                 "'Afraid of the dark? No need, you got me!'");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Item.width = 56;
             Item.height = 28;
 
@@ -39,10 +35,10 @@ namespace AtlasMod.Content.Items.Tools.Misc
             Item.shootSpeed = 8f;
 
             Item.rare = ItemRarityID.Green;
-            Item.value = Item.sellPrice(platinum: 0, gold: 0, silver: 0, copper: 0);
+            Item.value = Item.sellPrice(platinum: 0, gold: 3, silver: 90, copper: 50);
 
             Item.autoReuse = true;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.useTime = Item.useAnimation = 13;
             Item.UseSound = SoundID.Item11;
             Item.noMelee = true;
@@ -50,16 +46,14 @@ namespace AtlasMod.Content.Items.Tools.Misc
 
         public override bool CanConsumeAmmo(Item ammo, Player player) => Main.rand.NextBool(3);
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
             var flareType = type == ProjectileID.BlueFlare ? 1 : 0;
             type = ModContent.ProjectileType<HyperlightFlareGunProjectile>();
 
             var proj = Main.projectile[Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI)];
             (proj.ModProjectile as HyperlightFlareGunProjectile).OnSpawn(flareType);
 
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 var particle = new HyperlightFlareGunParticle(
                     color: HyperlightFlareGunProjectile.Colors[flareType],
                     timeLeft: 60,
@@ -75,19 +69,17 @@ namespace AtlasMod.Content.Items.Tools.Misc
 
         public override Vector2? HoldoutOffset() => new Vector2(-10, 2);
 
-        public override void AddRecipes()
-        {
-            var recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.FlareGun);
-            recipe.AddIngredient<Materials.MeticuliteCompound>(3);
-            recipe.AddIngredient(ItemID.Topaz, 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.Register();
+        public override void AddRecipes() {
+            ModContent.GetInstance<HyperlightFlareGun>().CreateRecipe()
+                .AddIngredient(ItemID.FlareGun)
+                .AddIngredient<Materials.MeticuliteCompound>(3)
+                .AddIngredient(ItemID.Topaz, 5)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 
-    public class HyperlightFlareGunProjectile : ModProjectile, IDrawAdditive
-    {
+    public class HyperlightFlareGunProjectile : ModProjectile, IDrawAdditive {
         public static readonly Color[] Colors = new Color[] { new Color(213, 46, 17), new Color(66, 188, 239) };
 
         private int _flareType;
@@ -95,13 +87,11 @@ namespace AtlasMod.Content.Items.Tools.Misc
 
         public override string Texture => AtlasMod.AssetPath + "Textures/Projectiles/HyperlightFlareGunProjectile";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Hyperlight Flare Gun");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Projectile.width = 5;
             Projectile.height = 5;
 

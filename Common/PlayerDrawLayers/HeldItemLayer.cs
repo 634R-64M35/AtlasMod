@@ -14,7 +14,7 @@ namespace AtlasMod.Common.PlayerDrawLayers
             var player = drawInfo.drawPlayer;
             var item = drawInfo.heldItem;
 
-            bool usingItem = player.itemAnimation > 0 && item.useStyle != 0;
+            bool usingItem = player.itemAnimation > 0 && item.useStyle != ItemUseStyleID.None;
             bool holdingSuitableItem = item.holdStyle != 0 && !player.pulley;
 
             if (!player.CanVisuallyHoldItem(item))

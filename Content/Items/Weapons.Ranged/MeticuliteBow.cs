@@ -10,22 +10,18 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AtlasMod.Content.Items.Weapons.Ranged
-{
-    public class MeticuliteBow : ModItem
-    {
+namespace AtlasMod.Content.Items.Weapons.Ranged {
+    public class MeticuliteBow : ModItem {
         public static readonly Color[] StarColors = new Color[] { new Color(248, 131, 80), new Color(80, 182, 255), new Color(255, 75, 130), Color.White };
 
         public override string Texture => AtlasMod.AssetPath + "Textures/Items/Weapons/MeticuliteBow";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Meticulite Bow");
-            Tooltip.SetDefault("[My english does not allow me to describe it correctly]");
+            Tooltip.SetDefault("Tags an enemy with a mark.\nWhen an enemy with this mark is hit by another weapon,\nthe mark will explode, dealing 5x the damage dealt.");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Item.width = 36;
             Item.height = 62;
 
@@ -39,9 +35,9 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             Item.shootSpeed = 15f;
 
             Item.rare = ItemRarityID.Green;
-            Item.value = Item.sellPrice(platinum: 0, gold: 0, silver: 0, copper: 0);
+            Item.value = Item.sellPrice(platinum: 0, gold: 0, silver: 80, copper: 40);
 
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.Item5;
             Item.useTime = Item.useAnimation = 16;
             Item.autoReuse = true;
@@ -55,13 +51,11 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
         public override Vector2? HoldoutOffset() => new Vector2(-2, 0);
         public override Color? GetAlpha(Color lightColor) => new Color(240, 240, 240, 240);
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
             var proj = Main.projectile[Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI)];
             (proj.ModProjectile as MeticuliteBowProjectile).OnSpawn();
 
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 var particle = new MeticuliteStarParticle(
                     color: StarColors[Main.rand.Next(StarColors.Length)],
                     timeLeft: 60,
@@ -78,35 +72,34 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
 
         public override void AddRecipes()
         {
-            var recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DemonBow);
-            recipe.AddIngredient<Materials.MeticuliteCompound>(8);
-            recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(ItemID.Cloud, 8);
-            recipe.AddTile(TileID.Anvils);
-            recipe.Register();
+            var recipe = ModContent.GetInstance<MeticuliteBow>();
+            recipe.CreateRecipe()
+                .AddIngredient(ItemID.DemonBow)
+                .AddIngredient<Materials.MeticuliteCompound>(8)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ItemID.Cloud, 8)
+                .AddTile(TileID.Anvils)
+                .Register();
 
-            recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.TendonBow);
-            recipe.AddIngredient<Materials.MeticuliteCompound>(8);
-            recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(ItemID.Cloud, 8);
-            recipe.AddTile(TileID.Anvils);
-            recipe.Register();
+            var altrecipe = ModContent.GetInstance<MeticuliteBow>();
+            altrecipe.CreateRecipe()
+                .AddIngredient(ItemID.TendonBow)
+                .AddIngredient<Materials.MeticuliteCompound>(8)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ItemID.Cloud, 8)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 
-    public class MeticuliteBowProjectile : ModProjectile, IDrawAdditive
-    {
+    public class MeticuliteBowProjectile : ModProjectile, IDrawAdditive {
         public override string Texture => AtlasMod.AssetPath + "Textures/Projectiles/MeticuliteBowProjectile";
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Meticulite Bow");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Projectile.arrow = true;
 
             Projectile.width = 10;
@@ -118,15 +111,12 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             Projectile.timeLeft = 1200;
         }
 
-        public override void AI()
-        {
+        public override void AI() {
             Lighting.AddLight(Projectile.Center, new Color(233, 75, 61).ToVector3() * 0.3f);
         }
 
-        public override void Kill(int timeLeft)
-        {
-            for (int i = 0; i < 12; i++)
-            {
+        public override void Kill(int timeLeft) {
+            for (int i = 0; i < 12; i++) {
                 var vector = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi);
                 var particle = new MeticuliteStarParticle(
                     color: MeticuliteBow.StarColors[Main.rand.Next(MeticuliteBow.StarColors.Length)],
@@ -140,26 +130,24 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
             }
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
+        public override bool PreDraw(ref Color lightColor) {
             var texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Projectiles/MeticuliteBowProjectile");
             var rotation = Projectile.rotation;
             var position = Projectile.Center - Main.screenPosition - Vector2.UnitY.RotatedBy(Projectile.rotation) * 4;
 
             var color = new Color(221, 21, 82) * 0.35f;
-            var progress = (float)Main.GlobalTimeWrappedHourly + Projectile.whoAmI * 0.55f;
+            var progress = Main.GlobalTimeWrappedHourly + Projectile.whoAmI * 0.55f;
 
-            for (int i = 0; i < 5; i++)
-            {
-                Main.EntitySpriteDraw(texture.Value, position + new Vector2(0, (float)Math.Sin(progress) * 6).RotatedBy(progress + MathHelper.TwoPi / 5f * i), null, color, rotation, new Vector2(texture.Width() * 0.5f, 0), Projectile.scale * 1.1f, SpriteEffects.None, 0); ;
+            for (int i = 0; i < 5; i++) {
+                Main.EntitySpriteDraw(texture.Value, position + new Vector2(0, (float)Math.Sin(progress) * 6).RotatedBy(progress + MathHelper.TwoPi / 5f * i), null, 
+                    color, rotation, new Vector2(texture.Width() * 0.5f, 0), Projectile.scale * 1.1f, SpriteEffects.None, 0); ;
             }
             Main.EntitySpriteDraw(texture.Value, position, null, Color.White * 0.95f, rotation, new Vector2(texture.Width() * 0.5f, 0), Projectile.scale, SpriteEffects.None, 0);
 
             return false;
         }
 
-        public void OnSpawn()
-        {
+        public void OnSpawn() {
             var trail = new SimpleTrail(
                 target: Projectile,
                 length: 16 * 5,
@@ -168,15 +156,13 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
                 additive: true
             );
             trail.SetDissolveSpeed(1f);
-            trail.SetCustomPositionMethod((proj) =>
-            {
+            trail.SetCustomPositionMethod((proj) => {
                 return proj.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * 30;
             });
             PrimitiveTrailSystem.NewTrail(trail);
         }
 
-        void IDrawAdditive.DrawAdditive()
-        {
+        void IDrawAdditive.DrawAdditive() {
             var position = Projectile.Center - Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.rotation) * 3;
             var texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Misc/Extra_1");
             var color = new Color(233, 75, 61) * 0.35f;
@@ -190,8 +176,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
         }
     }
 
-    public class MeticuliteBowMarkGlobalNPC : GlobalNPC
-    {
+    public class MeticuliteBowMarkGlobalNPC : GlobalNPC {
         public static readonly Color EffectColor = new(47, 163, 247);
 
         public bool IsMarked => Timer > 0;
@@ -199,8 +184,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
 
         public override bool InstancePerEntity => true;
 
-        public override void PostAI(NPC npc)
-        {
+        public override void PostAI(NPC npc) {
             if (IsMarked) Timer--;
         }
 
@@ -210,29 +194,22 @@ namespace AtlasMod.Content.Items.Weapons.Ranged
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
             => this.ModifyHitByPlayer(npc, ref damage, projectile.type == ModContent.ProjectileType<MeticuliteBowProjectile>());
 
-        private void ModifyHitByPlayer(NPC npc, ref int damage, bool meticuliteArrow = false)
-        {
-            if (meticuliteArrow)
-            {
+        private void ModifyHitByPlayer(NPC npc, ref int damage, bool meticuliteArrow = false) {
+            if (meticuliteArrow) {
                 Timer = 60 * 7;
-            }
-            else if (IsMarked)
-            {
+            } else if (IsMarked) {
                 damage = (int)(damage * 1.25f);
             }
         }
 
-        public override bool PreAI(NPC npc)
-        {
-            if (IsMarked)
-            {
+        public override bool PreAI(NPC npc) {
+            if (IsMarked) {
                 Lighting.AddLight(npc.Center, EffectColor.ToVector3() * 0.3f);
             }
             return true;
         }
 
-        public void DrawMeticuliteMark(NPC npc)
-        {
+        public void DrawMeticuliteMark(NPC npc) {
             if (!npc.active || !IsMarked) return;
 
             var rotation = (float)Main.GlobalTimeWrappedHourly + npc.whoAmI * 0.4f;
