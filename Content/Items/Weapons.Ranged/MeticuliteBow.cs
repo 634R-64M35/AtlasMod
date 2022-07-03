@@ -70,10 +70,8 @@ namespace AtlasMod.Content.Items.Weapons.Ranged {
             return false;
         }
 
-        public override void AddRecipes()
-        {
-            var recipe = ModContent.GetInstance<MeticuliteBow>();
-            recipe.CreateRecipe()
+        public override void AddRecipes() {
+            CreateRecipe()
                 .AddIngredient(ItemID.DemonBow)
                 .AddIngredient<Materials.MeticuliteCompound>(8)
                 .AddIngredient(ItemID.FallenStar, 5)
@@ -81,8 +79,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged {
                 .AddTile(TileID.Anvils)
                 .Register();
 
-            var altrecipe = ModContent.GetInstance<MeticuliteBow>();
-            altrecipe.CreateRecipe()
+            CreateRecipe()
                 .AddIngredient(ItemID.TendonBow)
                 .AddIngredient<Materials.MeticuliteCompound>(8)
                 .AddIngredient(ItemID.FallenStar, 5)

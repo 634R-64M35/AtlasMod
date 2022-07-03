@@ -46,7 +46,7 @@ namespace AtlasMod.Content.Items.Weapons.Ranged {
         }
 
         public override void AddRecipes() {
-            ModContent.GetInstance<HurricaneGRS>().CreateRecipe()
+            CreateRecipe()
                 .AddIngredient(ItemID.RocketLauncher)
                 .AddIngredient(ItemID.ChlorophyteBar, 15)
                 .AddIngredient(ItemID.Nanites, 50)

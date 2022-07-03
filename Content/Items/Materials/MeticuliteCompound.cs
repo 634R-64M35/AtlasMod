@@ -18,7 +18,7 @@ namespace AtlasMod.Content.Items.Materials {
             Item.value = Item.sellPrice(platinum: 0, gold: 0, silver: 55, copper: 60);
         }
         public override void AddRecipes() {
-            ModContent.GetInstance<MeticuliteCompound>().CreateRecipe()
+            CreateRecipe()
                 .AddIngredient<MeticuliteOre>(3)
                 .AddIngredient(ItemID.FallenStar)
                 .AddRecipeGroup("AnyCloudType", 5)

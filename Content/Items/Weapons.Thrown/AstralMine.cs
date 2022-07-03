@@ -24,6 +24,7 @@ namespace AtlasMod.Content.Items.Weapons.Thrown {
             Item.width = 26;
             Item.height = 26;
 
+            Item.DamageType = DamageClass.Ranged;
             Item.damage = 150;
             Item.crit = 0;
             Item.knockBack = 0;

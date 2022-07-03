@@ -70,7 +70,7 @@ namespace AtlasMod.Content.Items.Tools.Misc {
         public override Vector2? HoldoutOffset() => new Vector2(-10, 2);
 
         public override void AddRecipes() {
-            ModContent.GetInstance<HyperlightFlareGun>().CreateRecipe()
+            CreateRecipe()
                 .AddIngredient(ItemID.FlareGun)
                 .AddIngredient<Materials.MeticuliteCompound>(3)
                 .AddIngredient(ItemID.Topaz, 5)
@@ -105,24 +105,18 @@ namespace AtlasMod.Content.Items.Tools.Misc {
             Projectile.hide = true;
         }
 
-        public override bool PreAI()
-        {
-            if (Projectile.localAI[0] == 0f)
-            {
+        public override bool PreAI() {
+            if (Projectile.localAI[0] == 0f) {
                 Projectile.ai[0] = Projectile.velocity.X;
                 Projectile.ai[1] = Projectile.velocity.Y;
                 Projectile.localAI[1] += 1f;
 
-                if (Projectile.localAI[1] >= 30f)
-                {
+                if (Projectile.localAI[1] >= 30f) {
                     Projectile.velocity.Y += 0.09f;
                     Projectile.localAI[1] = 30f;
                 }
-            }
-            else
-            {
-                if (!Collision.SolidCollision(Projectile.position - Vector2.One * 4, Projectile.width + 8, Projectile.height + 8))
-                {
+            } else {
+                if (!Collision.SolidCollision(Projectile.position - Vector2.One * 4, Projectile.width + 8, Projectile.height + 8)) {
                     Projectile.localAI[0] = 0f;
                     Projectile.localAI[1] = 30f;
                 }
@@ -135,10 +129,8 @@ namespace AtlasMod.Content.Items.Tools.Misc {
             return false;
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if (Projectile.localAI[0] == 0f)
-            {
+        public override bool OnTileCollide(Vector2 oldVelocity) {
+            if (Projectile.localAI[0] == 0f) {
                 if (Projectile.wet) Projectile.position += oldVelocity / 2f;
                 else Projectile.position += oldVelocity;
 
@@ -151,13 +143,11 @@ namespace AtlasMod.Content.Items.Tools.Misc {
             return false;
         }
 
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
             behindNPCsAndTiles.Add(index);
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
+        public override bool PreDraw(ref Color lightColor) {
             var texture = TextureAssets.Projectile[Type];
             var width = texture.Width() / 2;
             var rotation = Projectile.rotation;
@@ -169,8 +159,7 @@ namespace AtlasMod.Content.Items.Tools.Misc {
             return false;
         }
 
-        public override void PostDraw(Color lightColor)
-        {
+        public override void PostDraw(Color lightColor) {
             var texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Projectiles/HyperlightFlareGunProjectile_Extra");
             var width = texture.Width() / 2;
             var rotation = Projectile.rotation;
@@ -181,8 +170,7 @@ namespace AtlasMod.Content.Items.Tools.Misc {
             Main.EntitySpriteDraw(texture.Value, position, rect, Color.White * 0.85f, rotation, origin, Projectile.scale, SpriteEffects.None, 0);
         }
 
-        public void OnSpawn(int flareType)
-        {
+        public void OnSpawn(int flareType) {
             _flareType = flareType;
 
             _trail = new RoundedTrail(
@@ -191,16 +179,14 @@ namespace AtlasMod.Content.Items.Tools.Misc {
                 width: (progress) => 8,
                 color: (progress) => Colors[_flareType] * (1 - progress)
             );
-            _trail.SetCustomPositionMethod((proj) =>
-            {
+            _trail.SetCustomPositionMethod((proj) => {
                 return proj.Center - Vector2.UnitY.RotatedBy(Projectile.rotation) * 11;
             });
 
             PrimitiveTrailSystem.NewTrail(_trail);
         }
 
-        void IDrawAdditive.DrawAdditive()
-        {
+        void IDrawAdditive.DrawAdditive() {
             var position = Projectile.Center - Main.screenPosition - Vector2.UnitY.RotatedBy(Projectile.rotation) * 11;
             var texture = ModContent.Request<Texture2D>(AtlasMod.AssetPath + "Textures/Misc/Extra_1");
             var color = Colors[_flareType] * 0.5f;
